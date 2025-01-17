@@ -1,5 +1,5 @@
 import { ColumnHeader } from '../../components/Column/ColumnHeader.js';
-import { handleMoveCard, showCardList } from '../../utils/cardUtils.js';
+import { handleColumn, handleMoveCard, showCardList } from '../../utils/cardUtils.js';
 import { loadCss } from '../../utils/loadcss.js'
 
 export function ColumnLayout({todoModel,progressModel,doneModel}) {
@@ -71,6 +71,51 @@ const doneColumn = ColumnHeader({
         handleMoveCard({column,e});
     }));
 
+    columnCardBoxes.forEach((column)=>column.addEventListener("dragend", (e) => {
+        const afterColumn = e.target.closest('.column-box')
+        const afterCardArray =Array.from(afterColumn.querySelectorAll('.column-card-container'));
+    
+        const tasksData=JSON.parse(localStorage.getItem('tasks'))
+        
+        let prevColumn =''
+        let task =null 
+        Object.entries(tasksData).forEach(([key, taskArray]) => {
+            taskArray.forEach((item) => {
+              if (item.id === Number(e.target.id)) {
+                task=item
+                prevColumn = getColumnId(key);
+              }
+            });
+          });
+        
+
+        
+
+        
+
+
+        const [afterModel, afterColumnSort]=handleColumn(afterColumn.id);
+        const [prevModel, prevColumnSort]=handleColumn(prevColumn);
+
+        prevModel.deleteTask(task.id);
+    
+        const insertIndex = afterCardArray.findIndex((item) => Number(item.id) === task.id);
+        if (insertIndex === -1) {    
+            afterModel.tasks.push(task);
+        } else {
+            afterModel.tasks.splice(insertIndex, 0, task);
+        }
+        const updatedTasks = {
+            ...tasksData,
+            [prevColumnSort]: prevModel.tasks,
+            [afterColumnSort]: afterModel.tasks,
+          };
+          localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+          
+          afterModel.notify(afterModel.tasks);
+
+    }));
+
     return columnLayout 
 }
 
@@ -78,7 +123,22 @@ const doneColumn = ColumnHeader({
 
 export function handleShowCardModel({columnBox,model}){
     model.subscribe((task)=>{
+
         showCardList(columnBox,task);
     }   
     )
+}
+
+
+export function getColumnId(key) {
+  switch (key) {
+    case "todos":
+      return "todo-column";
+    case "progress":
+      return "in-progress-column";
+    case "done":
+      return "done-column";
+    default:
+      return null;
+  }
 }
