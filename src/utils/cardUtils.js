@@ -93,10 +93,21 @@ export function deleteCard({columnCard,columnName,tasksData}){
     const cardId=Number(columnCard.id)
     const [model, columnSort] = handleColumn(columnName);
     model.deleteTask(cardId)
-        
+    const deleteCard = tasksData[columnSort].find((task) => task.id === cardId);
+
     const newData = {...tasksData,[columnSort]:model.tasks}
     localStorage.setItem('tasks',JSON.stringify(newData)) ;  
-
+    
+    const deleteHistory ={
+        username:'김동영',
+        type:'delete-card',
+        title:deleteCard.title,
+        timeStamp:cardId,
+        action:'삭제',
+    }
+    historyModel.action(deleteHistory);
+    const newHistory=historyModel.getHistory();
+    localStorage.setItem('history',JSON.stringify(newHistory));  
     modalInstances[cardId].toggle()
 }
 
