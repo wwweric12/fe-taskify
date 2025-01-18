@@ -163,11 +163,23 @@ export function editCard({editForm,columnName,tasksData}){
         }
     
         const [model, columnSort] = handleColumn(columnName);
+
+        const preTask = tasksData[columnSort].find((task)=> task.id === Number(cardId));
         model.editTask(editCard);
         
         const newData = {...tasksData,[columnSort]:model.tasks}
         localStorage.setItem('tasks',JSON.stringify(newData)) ; 
 
+        const editHistory ={
+            username:'김동영',
+            type:'edit-card',
+            title:preTask.title,
+            timeStamp:cardId,
+            action:'변경',
+        }
+        historyModel.action(editHistory);
+        const newHistory=historyModel.getHistory();
+        localStorage.setItem('history',JSON.stringify(newHistory)); 
         
     }
 }
