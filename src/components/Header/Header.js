@@ -8,7 +8,7 @@ export function Header(){
       <div class='logo-box'>
         <div class="logo">TASKIFY</div>
       </div>
-      <button class="history-btn">
+      <button class="history-btn" id="history-toggle">
         <img src="./src/assets/icons/history.svg" alt="활동기록">
       </button>
     `;
