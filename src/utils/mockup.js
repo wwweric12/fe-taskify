@@ -1,22 +1,28 @@
-import { TaskModel } from '../observer/observer.js';
+import { HistoryModel, TaskModel } from '../observer/observer.js';
 
-export function loadLocalStorage(){
-  let data = JSON.parse(localStorage.getItem('tasks'));
+export function loadLocalStorage({type,initialData}){
+  let data = JSON.parse(localStorage.getItem(type));
   if(!data){
-    data ={ 
-      'todos': [],'progress': [],'done': []
-    }
-    localStorage.setItem('tasks',JSON.stringify(data));
+    localStorage.setItem(type,JSON.stringify(initialData));
+    return initialData;
   }
   return data;
 }
 
 
 
-const data =loadLocalStorage()
-export const todoModel = new TaskModel(data.todos);
-export const progressModel = new TaskModel(data.progress);
-export const doneModel = new TaskModel(data.done);
+const taskData =loadLocalStorage({type:'tasks', initialData:{ 
+  'todos': [],'progress': [],'done': []
+}})
+
+const historyData =loadLocalStorage({type:'history', initialData:[]})
+
+
+export const todoModel = new TaskModel(taskData.todos);
+export const progressModel = new TaskModel(taskData.progress);
+export const doneModel = new TaskModel(taskData.done);
+
+export const historyModel = new HistoryModel(historyData);
 
 
 
