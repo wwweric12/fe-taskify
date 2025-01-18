@@ -1,6 +1,6 @@
 
 import { ColumnCard, modalInstances } from '../components/Card/ColumnCard.js';
-import {  doneModel, progressModel, todoModel } from './mockup.js';
+import {  doneModel, historyModel, progressModel, todoModel } from './mockup.js';
 
 export function showCardList(element,cardList){
     while (element.firstChild) {
@@ -52,8 +52,9 @@ export function addCard({titleInput,contentInput,addForm,columnName,tasksData}){
 
     if (title && content) {
         addForm.remove()
+        const id=Date.now()
         const newTodo ={
-            id:Date.now(),
+            id,
             title,
             content ,
             author:"author by web" ,                
@@ -64,12 +65,21 @@ export function addCard({titleInput,contentInput,addForm,columnName,tasksData}){
         }
         const [model, columnSort] = handleColumn(columnName);
         model.addTask(newTodo)
-        
+        const addHistory ={
+            username:'김동영',
+            type:'add-card',
+            column:columnName,
+            title,
+            timeStamp:id,
+            action:'등록',
+        }
+        historyModel.action(addHistory);
         const newData = {...tasksData,[columnSort]:model.tasks}
+        const newHistory=historyModel.getHistory()
         localStorage.setItem('tasks',JSON.stringify(newData)) ;  
+        localStorage.setItem('history',JSON.stringify(newHistory)); 
     }
     return;
-
 }
 
 export function deleteCardToggle({columnCard}){
