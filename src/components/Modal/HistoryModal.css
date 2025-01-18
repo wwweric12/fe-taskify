@@ -1,4 +1,7 @@
 .history-modal-container{
+    position: absolute;
+    top:64px;
+    right: 56px;
     display: flex;
     width:min-content;
     flex-direction: column;

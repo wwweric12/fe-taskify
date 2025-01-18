@@ -1,8 +1,9 @@
+import { showHistoryList } from '../../utils/historyUtils.js';
 import { loadCss } from '../../utils/loadcss.js';
+import { historyModel } from '../../utils/mockup.js';
 import { Button } from '../Button/Button.js';
-import { HistoryCard } from '../Card/HistoryCard.js';
 
-export function HistoryModal({title,content,buttonProps,historyData}){
+export function HistoryModal({title,content,historyData}){
     const historyModal = document.createElement('div');
     historyModal.className = 'history-modal-container';
     historyModal.innerHTML =`
@@ -26,12 +27,7 @@ export function HistoryModal({title,content,buttonProps,historyData}){
 
     // 만약 historydata가 있다면 
     else {
-        const historyCards = historyData
-            .map((item) => HistoryCard(item).outerHTML) 
-            .join(''); 
-        historyContentBox.insertAdjacentHTML('afterbegin', historyCards);
-
-
+        showHistoryList({element:historyContentBox,historyList:historyData});
         const historyFooter = `<footer class='history-footer-box'>
             <button class='history-delete-button'>기록 전체 삭제</button>
         </footer>`;
@@ -40,6 +36,9 @@ export function HistoryModal({title,content,buttonProps,historyData}){
 
     }
     
+    historyModel.subscribe((history)=>{
+        showHistoryList({element:historyContentBox,historyList:history})
+    })
 
 
 
@@ -49,10 +48,8 @@ export function HistoryModal({title,content,buttonProps,historyData}){
         text:'닫기',
         icon:'close',
         textColor:'grayscale600',
+        id:'history-close-modal'
     })
-
-
-
 
     const closedButtonBox=historyModal.querySelector('.history-button-box')
     closedButtonBox.insertAdjacentElement('beforeend',closedModalButton);

@@ -88,12 +88,6 @@ const doneColumn = ColumnHeader({
             });
           });
         
-
-        
-
-        
-
-
         const [afterModel, afterColumnSort]=handleColumn(afterColumn.id);
         const [prevModel, prevColumnSort]=handleColumn(prevColumn);
 
