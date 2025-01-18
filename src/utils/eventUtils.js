@@ -1,4 +1,5 @@
 import { addCard, addCardToggle, createOrder, deleteCard, deleteCardToggle, editCard, editCardToggle, latestOrder } from './cardUtils.js';
+import { historyCloseModal, historyToggle } from './historyUtils.js';
 import { loadLocalStorage } from './mockup.js';
 
 
@@ -31,9 +32,15 @@ export function handleEventListener(e) {
     const  chipContainer =target.closest('.chip-container')
 
 
-    const tasksData = loadLocalStorage()
-
+    const tasksData = loadLocalStorage({type:"tasks"});
+    const historyData =loadLocalStorage({type:"history"});
+    
     if (target.closest('#history-toggle')) {
+        historyModalState = historyToggle({app,historyModalState,historyData})
+        return;
+    }
+    else if (target.closest('#history-close-modal')) {
+        historyModalState =historyCloseModal({app,historyModalState})
         return;
     }
 
@@ -85,4 +92,11 @@ export function handleEventListener(e) {
         createOrder({chipContainer,tasksData});
         return;
     }
+}
+
+
+let historyModalState= {
+    title: "사용자 활동기록",
+    content: "사용자 활동 기록이 없습니다.",
+    state: false
 }
