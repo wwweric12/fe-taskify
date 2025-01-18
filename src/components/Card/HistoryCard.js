@@ -4,6 +4,7 @@ export function HistoryCard({username,title,column,afterColumn,timeStamp,type,ac
     const historyCard = document.createElement('div');
     historyCard.className = 'historyCard-container';
     const tempContainer = document.createElement('div');
+    tempContainer.className= 'history-content';
 
     if(type==='add-card'){
         tempContainer.innerHTML =`
@@ -30,13 +31,12 @@ export function HistoryCard({username,title,column,afterColumn,timeStamp,type,ac
         <div class='profile-img'></div>
         <div class='history-content-box'>
             <div class='history-username'>${username}</div>
-            <div class='history-content'></div>
             <div class='history-timestamp'>${timeStamp}</div>
         </div>
         </div>
     `
-    const historyContent = historyCard.querySelector('.history-content')
-    historyContent.appendChild(tempContainer);
+    const historyUserName = historyCard.querySelector('.history-username')
+    historyUserName.insertAdjacentElement('afterend',tempContainer);
 
 
     loadCss('../src/components/Card/historyCard.css')

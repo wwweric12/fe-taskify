@@ -20,7 +20,7 @@ export function HistoryModal({title,content,historyData}){
 
     // 만약 historydata가 없다면
     if(!historyData || historyData.length === 0){
-        const contentElement = `<div class='history-content'>${content}</div>`;
+        const contentElement = `<div class='history-modal-content'>${content}</div>`;
         historyContentBox.insertAdjacentHTML('afterbegin', contentElement)
 
     }
