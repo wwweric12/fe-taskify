@@ -1,6 +1,7 @@
 import { ColumnHeader } from '../../components/Column/ColumnHeader.js';
 import { handleColumn, handleMoveCard, showCardList } from '../../utils/cardUtils.js';
 import { loadCss } from '../../utils/loadcss.js'
+import { historyModel } from '../../utils/mockup.js';
 
 export function ColumnLayout({todoModel,progressModel,doneModel}) {
     const columnLayout = document.createElement('div')
@@ -107,6 +108,24 @@ const doneColumn = ColumnHeader({
           localStorage.setItem("tasks", JSON.stringify(updatedTasks));
           
           afterModel.notify(afterModel.tasks);
+        
+        
+        if(prevColumnSort!==afterColumnSort){
+
+          const moveHistory={
+            username:'김동영',
+            type:'move-card',
+            column:prevColumnSort,
+            afterColumn:afterColumnSort,
+            title:task.title,
+            timeStamp:task.id,
+            action:'이동',
+        }
+        historyModel.action(moveHistory);
+        const newHistory=historyModel.getHistory()
+        localStorage.setItem('history',JSON.stringify(newHistory)); 
+        }
+        
 
     }));
 
