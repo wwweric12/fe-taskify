@@ -59,3 +59,18 @@ export class PrimaryModal extends Observable {
     }
 
 }
+
+export class HistoryModel extends Observable{
+    constructor(initialData) {
+        super();
+        this.history =  initialData || []
+    }
+    action(history){
+        this.history = [history,...this.history];
+        this.notify(this.history)
+    }
+    getHistory(){
+        return this.history;
+    }
+
+}
